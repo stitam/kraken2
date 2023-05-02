@@ -43,7 +43,8 @@ while (<>) {
   my $full_path = $ftp_path . "/" . basename($ftp_path) . $suffix;
   # strip off server/leading dir name to allow --files-from= to work w/ rsync
   # also allows filenames to just start with "all/", which is nice
-  if (! ($full_path =~ s#^ftp://${qm_server}${qm_server_path}/##)) {
+  #if (! ($full_path =~ s#^ftp://${qm_server}${qm_server_path}/##)) {
+  if (! ($full_path =~ s#^https://${qm_server}${qm_server_path}/##)) {
     die "$PROG: unexpected FTP path (new server?) for $ftp_path\n";
   }
   $manifest{$full_path} = $taxid;
@@ -132,7 +133,7 @@ my $sequences_added = 0;
 my $ch_added = 0;
 my $ch = $is_protein ? "aa" : "bp";
 my $max_out_chars = 0;
-for my $in_filename (sort keys %manifest) {
+for my $in_filename (keys %manifest) {
   my $taxid = $manifest{$in_filename};
   if ($use_ftp) {  # FTP downloading doesn't create full path locally
     $in_filename = "all/" . basename($in_filename);
